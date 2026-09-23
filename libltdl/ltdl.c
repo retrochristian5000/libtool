@@ -2152,7 +2152,7 @@ lt_dlpath_insertdir (char **ppath, char *before, const char *dir)
       goto cleanup;
     }
 
-  assert (ppath && *ppath);
+  assert (*ppath);
 
   if (argzize_path (*ppath, &argz, &argz_len) != 0)
     {
