@@ -1101,8 +1101,8 @@ m4_defun_once([_LT_REQUIRED_DARWIN_CHECKS],[
     rhapsody* | darwin*)
     AC_CHECK_TOOL([DSYMUTIL], [dsymutil], [:])
     AC_CHECK_TOOL([NMEDIT], [nmedit], [:])
-    AC_CHECK_TOOL([LIPO], [lipo], [:])
-    AC_CHECK_TOOL([OTOOL], [otool], [:])
+    AC_CHECK_TOOLS([LIPO], [llvm-lipo lipo], [:])
+    AC_CHECK_TOOLS([OTOOL], [llvm-otool otool], [:])
     AC_CHECK_TOOL([OTOOL64], [otool64], [:])
     _LT_DECL([], [DSYMUTIL], [1],
       [Tool to manipulate archived DWARF debug symbol files on Mac OS X])
@@ -1644,7 +1644,7 @@ need_locks=$enable_libtool_lock
 # _LT_PROG_AR
 # -----------
 m4_defun([_LT_PROG_AR],
-[AC_CHECK_TOOLS(AR, [ar], false)
+[AC_CHECK_TOOLS(AR, [llvm-ar ar], false)
 : ${AR=ar}
 _LT_DECL([], [AR], [1], [The archiver])
 
@@ -1696,11 +1696,11 @@ _LT_DECL([], [archiver_list_spec], [1],
 m4_defun([_LT_CMD_OLD_ARCHIVE],
 [_LT_PROG_AR
 
-AC_CHECK_TOOL(STRIP, strip, :)
+AC_CHECK_TOOLS(STRIP, [llvm-strip strip], :)
 test -z "$STRIP" && STRIP=:
 _LT_DECL([], [STRIP], [1], [A symbol stripping program])
 
-AC_REQUIRE([AC_PROG_RANLIB])
+AC_CHECK_TOOLS(RANLIB, [llvm-ranlib ranlib], :)
 test -z "$RANLIB" && RANLIB=:
 _LT_DECL([], [RANLIB], [1],
     [Commands used to install an old-style archive])
@@ -3927,9 +3927,9 @@ AC_CACHE_CHECK([for BSD- or MS-compatible name lister (nm)], lt_cv_path_NM,
   # Let the user override the test.
   lt_cv_path_NM=$NM
 else
-  lt_nm_to_check=${ac_tool_prefix}nm
+  lt_nm_to_check="${ac_tool_prefix}llvm-nm ${ac_tool_prefix}nm"
   if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
-    lt_nm_to_check="$lt_nm_to_check nm"
+    lt_nm_to_check="$lt_nm_to_check llvm-nm nm"
   fi
   for lt_tmp_nm in $lt_nm_to_check; do
     lt_save_ifs=$IFS; IFS=$PATH_SEPARATOR
@@ -8757,7 +8757,7 @@ AC_SUBST([GREP])
 # If we don't have a new enough Autoconf to choose the best objdump
 # available, choose the one first in the user's PATH.
 m4_defun([_LT_DECL_OBJDUMP],
-[AC_CHECK_TOOL(OBJDUMP, objdump, false)
+[AC_CHECK_TOOLS(OBJDUMP, [llvm-objdump objdump], false)
 test -z "$OBJDUMP" && OBJDUMP=objdump
 _LT_DECL([], [OBJDUMP], [1], [An object symbol dumper])
 AC_SUBST([OBJDUMP])
