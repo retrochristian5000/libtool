@@ -95,6 +95,18 @@ dnl 1.11 is needed for color-tests, 1.11.1 fixes a security issue.
 AM_INIT_AUTOMAKE([1.11.1 gnu subdir-objects dist-xz])
 AM_SILENT_RULES([yes])
 
+dnl Automake defaults ARFLAGS to "cru".  Keep Libtool's own build aligned with
+dnl the "cr" default used by libtool.m4, which avoids the obsolete update-only
+dnl modifier with deterministic archivers such as llvm-ar.  Honor the legacy
+dnl AR_FLAGS variable with the same precedence used by Libtool, then publish one
+dnl value so Automake and Libtool cannot select different archive operations.
+AS_IF([test "${AR_FLAGS+set}" = set],
+  [ARFLAGS=$AR_FLAGS],
+  [AR_FLAGS=${ARFLAGS-cr}
+   ARFLAGS=$AR_FLAGS])
+AC_SUBST([ARFLAGS])
+AC_SUBST([AR_FLAGS])
+
 
 ## ------------------------- ##
 ## Autobuild initialisation. ##
