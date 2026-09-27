@@ -1655,7 +1655,13 @@ _LT_DECL([], [AR], [1], [The archiver])
 # ARFLAGS for automake and AR_FLAGS for libtool).  FIXME: Make the AR_FLAGS
 # variable obsoleted/removed.
 
-test ${AR_FLAGS+y} || AR_FLAGS=${ARFLAGS-cr}
+if test -n "${AR_FLAGS-}"; then
+  :
+elif test -n "${ARFLAGS-}"; then
+  AR_FLAGS=$ARFLAGS
+else
+  AR_FLAGS=cr
+fi
 lt_ar_flags=$AR_FLAGS
 _LT_DECL([], [lt_ar_flags], [1], [Flags to create an archive (by configure)])
 
@@ -1682,7 +1688,7 @@ fi
 
 # Make AR_FLAGS overridable by 'make ARFLAGS='.  Don't try to run-time override
 # by AR_FLAGS because that was never working and AR_FLAGS is about to die.
-_LT_DECL([], [AR_FLAGS], [\@S|@{ARFLAGS-"\@S|@lt_ar_flags"}],
+_LT_DECL([], [AR_FLAGS], [\@S|@{ARFLAGS:-"\@S|@lt_ar_flags"}],
          [Flags to create an archive])
 
 AC_CACHE_CHECK([for archiver @FILE support], [lt_cv_ar_at_file],

@@ -100,9 +100,11 @@ dnl the "cr" default used by libtool.m4, which avoids the obsolete update-only
 dnl modifier with deterministic archivers such as llvm-ar.  Honor the legacy
 dnl AR_FLAGS variable with the same precedence used by Libtool, then publish one
 dnl value so Automake and Libtool cannot select different archive operations.
-AS_IF([test "${AR_FLAGS+set}" = set],
+AS_IF([test -n "${AR_FLAGS-}"],
   [ARFLAGS=$AR_FLAGS],
-  [AR_FLAGS=${ARFLAGS-cr}
+  [test -n "${ARFLAGS-}"],
+  [AR_FLAGS=$ARFLAGS],
+  [AR_FLAGS=cr
    ARFLAGS=$AR_FLAGS])
 AC_SUBST([ARFLAGS])
 AC_SUBST([AR_FLAGS])

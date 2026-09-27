@@ -109,6 +109,14 @@ LT_AT_AUTOCONF([--force])
 LT_AT_CONFIGURE
 LT_AT_MAKE
 
+# An explicitly empty ARFLAGS must not erase Libtool's configured archive
+# operation. Without the fallback, llvm-ar receives the archive pathname as
+# its option string and reports a missing [relpos] for the a/b/i modifiers.
+AT_CHECK([ARFLAGS= $LIBTOOL --mode=link --tag=CC $CC $CFLAGS $LDFLAGS \
+            -static -o libempty.la hello.lo],
+         [0], [ignore], [ignore])
+AT_CHECK([test -f .libs/libempty.a || test -f libempty.a], [0])
+
 LT_AT_EXEC_CHECK([./hell], [0], [stdout])
 AT_CHECK([$GREP 'Welcome to GNU Hell' stdout], [], [ignore])
 AT_CHECK([$GREP 'This is not GNU Hello.' stdout],
