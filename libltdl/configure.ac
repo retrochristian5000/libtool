@@ -52,6 +52,18 @@ LT_CONFIG_LTDL_DIR([.]) # I am me!
 AM_INIT_AUTOMAKE([gnu subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
+dnl Keep standalone libltdl archive creation aligned with the top-level
+dnl Libtool build. Empty AR_FLAGS/ARFLAGS must not erase the required
+dnl archive operation when llvm-ar is used.
+AS_IF([test -n "${AR_FLAGS-}"],
+  [ARFLAGS=$AR_FLAGS],
+  [test -n "${ARFLAGS-}"],
+  [AR_FLAGS=$ARFLAGS],
+  [AR_FLAGS=cr
+   ARFLAGS=$AR_FLAGS])
+AC_SUBST([ARFLAGS])
+AC_SUBST([AR_FLAGS])
+
 
 ## ------------------------------- ##
 ## Libtool specific configuration. ##
