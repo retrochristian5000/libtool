@@ -1099,7 +1099,8 @@ $RM -r conftest*
 m4_defun_once([_LT_REQUIRED_DARWIN_CHECKS],[
   case $host_os in
     rhapsody* | darwin*)
-    AC_CHECK_TOOL([DSYMUTIL], [dsymutil], [:])
+    dnl Prefer LLVM's drop-in Darwin inspection/debug tools when available.
+    AC_CHECK_TOOLS([DSYMUTIL], [llvm-dsymutil dsymutil], [:])
     AC_CHECK_TOOL([NMEDIT], [nmedit], [:])
     AC_CHECK_TOOLS([LIPO], [llvm-lipo lipo], [:])
     AC_CHECK_TOOLS([OTOOL], [llvm-otool otool], [:])
@@ -8767,7 +8768,7 @@ AC_SUBST([OBJDUMP])
 # ----------------
 # Ensure DLLTOOL variable is set.
 m4_defun([_LT_DECL_DLLTOOL],
-[AC_CHECK_TOOL(DLLTOOL, dlltool, false)
+[AC_CHECK_TOOLS(DLLTOOL, [llvm-dlltool dlltool], false)
 test -z "$DLLTOOL" && DLLTOOL=dlltool
 _LT_DECL([], [DLLTOOL], [1], [DLL creation program])
 AC_SUBST([DLLTOOL])
