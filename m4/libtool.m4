@@ -1659,6 +1659,27 @@ test ${AR_FLAGS+y} || AR_FLAGS=${ARFLAGS-cr}
 lt_ar_flags=$AR_FLAGS
 _LT_DECL([], [lt_ar_flags], [1], [Flags to create an archive (by configure)])
 
+# Do not let an invalid inherited ARFLAGS value masquerade as a missing
+# response-file capability.  Prove the selected archiver operation first so
+# LLVM/GNU/platform-specific flag mismatches fail at configure time with the
+# actual tool and flags in the diagnostic.
+if test x"$AR" != xfalse; then
+  AC_CACHE_CHECK([whether $AR accepts $AR_FLAGS to create an archive],
+    [lt_cv_ar_flags_usable],
+    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM],
+       [rm -f libconftest.a
+        if $AR $AR_FLAGS libconftest.a conftest.$ac_objext              >&AS_MESSAGE_LOG_FD 2>&1 &&
+           test -s libconftest.a; then
+          lt_cv_ar_flags_usable=yes
+        else
+          lt_cv_ar_flags_usable=no
+        fi
+        rm -f libconftest.a],
+       [lt_cv_ar_flags_usable=no])])
+  AS_IF([test x"$lt_cv_ar_flags_usable" != xyes],
+    [AC_MSG_ERROR([archiver flags '$AR_FLAGS' are not usable with '$AR'])])
+fi
+
 # Make AR_FLAGS overridable by 'make ARFLAGS='.  Don't try to run-time override
 # by AR_FLAGS because that was never working and AR_FLAGS is about to die.
 _LT_DECL([], [AR_FLAGS], [\@S|@{ARFLAGS-"\@S|@lt_ar_flags"}],
